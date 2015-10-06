@@ -32,8 +32,8 @@ cdef class SkeletonBounds(object):
                                                    float x1, float y1,
                                                    float x2, float y2)
 
-    cdef bool polygon_contains_point(SkeletonBounds self, list polygon,
-                                     float x, float y)
+    cpdef bool polygon_contains_point(SkeletonBounds self, list polygon,
+                                      float x, float y)
 
     cpdef bool polygon_intersects_segment(SkeletonBounds self, list polygon,
                                           float x1, float y1,
