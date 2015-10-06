@@ -1,0 +1,41 @@
+from cpython cimport bool
+
+from spine.attachment.attachment cimport Attachment
+from spine.slot cimport Slot
+
+
+cdef class SkinnedMeshAttachment(Attachment):
+
+    cdef public list bones
+    cdef public list weights
+    cdef public list uvs
+    cdef public list region_uvs
+    cdef public list triangles
+    cdef public int hull_length
+    cdef public float r
+    cdef public float g
+    cdef public float b
+    cdef public float a
+    cdef public basestring path
+    cdef public object renderer_object
+    cdef public float region_u
+    cdef public float region_v
+    cdef public float region_u2
+    cdef public float region_v2
+    cdef public bool region_rotate
+    cdef public float region_offset_x
+    cdef public float region_offset_y
+    cdef public float region_width
+    cdef public float region_height
+    cdef public float region_original_width
+    cdef public float region_original_height
+    cdef public list edges
+    cdef public float width
+    cdef public float height
+
+    cpdef compute_world_vertices(SkinnedMeshAttachment self, float x, float y,
+                                 Slot slot, list world_vertices)
+
+    cpdef compute_world_vertices_with_uvs(SkinnedMeshAttachment self,
+                                          float x, float y, Slot slot,
+                                          list world_vertices)
