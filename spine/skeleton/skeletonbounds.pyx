@@ -182,8 +182,8 @@ cdef class SkeletonBounds(object):
                 return self.bounding_boxes[i]
         return None
 
-    cdef bool polygon_contains_point(SkeletonBounds self, list polygon,
-                                     float x, float y):
+    cpdef bool polygon_contains_point(SkeletonBounds self, list polygon,
+                                      float x, float y):
         cdef:
             int nn = len(polygon)
             int prev_index = nn - 2
