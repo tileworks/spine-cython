@@ -1,9 +1,10 @@
-from sys import platform
 from os import remove
 from os.path import isfile
+from sys import platform
 from distutils.core import setup
 from distutils.extension import Extension
 
+import spine
 
 try:
     from Cython.Build import cythonize
@@ -150,7 +151,7 @@ else:
 
 setup(
     name='spine-cython',
-    version='0.5.0',
+    version=spine.__version__,
     author='Tileworks Games',
     author_email='tileworksgames@gmail.com',
     description='Spine runtimes for python',
