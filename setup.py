@@ -1,13 +1,12 @@
 from sys import platform
 from os import remove
-from os.path import join, dirname, isfile
+from os.path import isfile
 from distutils.core import setup
 from distutils.extension import Extension
 
 
 try:
     from Cython.Build import cythonize
-    from Cython.Distutils import build_ext
     have_cython = True
 except ImportError:
     have_cython = False
@@ -15,15 +14,14 @@ except ImportError:
 
 if platform == 'win32':
     cstdarg = '-std=gnu99'
-    libraries=['opengl32', 'glu32','glew32']
 else:
     cstdarg = '-std=c99'
-    libraries=[]
-
 
 do_clear_existing = False
 
-package_dir = {'spine': 'spine'}
+package_dir = {
+    'spine': 'spine'
+}
 
 package_data = {
     'spine': [
@@ -109,16 +107,17 @@ for name in modules:
     prefix = prefixes[name]
     module_files = modules[name]
     for module_name in module_files:
-        core_modules[prefix + module_name] = [file_prefix + module_name + '.pyx']
-        core_modules_c[prefix + module_name] = [file_prefix + module_name + '.c']
-        check_for_removal.append(file_prefix + module_name + '.c')
+        prefix_module_name = prefix + module_name 
+        file_prefix_module_name = file_prefix + module_name
+        core_modules[prefix_module_name] = [file_prefix_module_name + '.pyx']
+        core_modules_c[prefix_module_name] = [file_prefix_module_name + '.c']
+        check_for_removal.append(file_prefix_module_name + '.c')
 
 
 def build_ext(ext_name, files, include_dirs=[]):
     return Extension(
         ext_name, files, include_dirs,
-        extra_compile_args=[cstdarg, '-ffast-math'],
-        libraries=libraries
+        extra_compile_args=[cstdarg, '-ffast-math']
     )
 
 

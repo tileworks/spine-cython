@@ -27,6 +27,7 @@ class TextureFilter(object):
     def get_type(cls, type_name):
         return cls.__dict__[type_name]
 
+
 class TextureWrap(object):
 
     MirroredRepeat = 0
