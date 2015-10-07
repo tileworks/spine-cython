@@ -37,15 +37,3 @@ class TextureWrap(object):
     @classmethod
     def get_type(cls, type_name):
         return cls.__dict__[type_name]
-
-
-class BlendMode(object):
-
-    normal = 0
-    additive = 1
-    multiply = 2
-    screen = 3
-
-    @classmethod
-    def get_mode(cls, mode_name):
-        return cls.__dict__.get(mode_name)

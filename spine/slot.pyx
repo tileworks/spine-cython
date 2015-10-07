@@ -1,4 +1,4 @@
-from spine.atlas import BlendMode
+from spine.blendmode import BlendMode
 
 
 cdef class SlotData(object):

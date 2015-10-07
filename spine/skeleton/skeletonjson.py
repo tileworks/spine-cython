@@ -2,7 +2,7 @@ from __future__ import division
 import json
 from collections import Sequence
 
-from spine.atlas import BlendMode
+from spine.blendmode import BlendMode
 from spine.animation.animation import Animation
 from spine.animation.attachmenttimeline import AttachmentTimeline
 from spine.animation.colortimeline import ColorTimeline
