@@ -1,3 +1,45 @@
+class TextureFilter(object):
+
+    Nearest = 0
+    Linear = 1
+    MipMap = 2
+    MipMapNearestNearest = 3
+    MipMapLinearNearest = 4
+    MipMapNearestLinear = 5
+    MipMapLinearLinear = 6
+
+    _filter_types = {
+        'Nearest': 0,
+        'Linear': 1,
+        'MipMap': 2,
+        'MipMapNearestNearest': 3,
+        'MipMapLinearNearest': 4,
+        'MipMapNearestLinear': 5,
+        'MipMapLinearLinear': 6
+    }
+
+    @classmethod
+    def get_type(cls, type_name):
+        return cls._filter_types[type_name]
+
+
+class TextureWrap(object):
+
+    MirroredRepeat = 0
+    ClampToEdge = 1
+    Repeat = 2
+
+    _wrap_types = {
+        'MirroredRepeat': 0,
+        'ClampToEdge': 1,
+        'Repeat': 2
+    }
+
+    @classmethod
+    def get_type(cls, type_name):
+        return cls._wrap_types[type_name]
+
+
 class AbstractTextureLoader(object):
 
     images_path = ''

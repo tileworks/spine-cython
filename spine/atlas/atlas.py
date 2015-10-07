@@ -1,9 +1,34 @@
 from __future__ import division
 
-from spine.atlas import AtlasFormat, TextureFilter, TextureWrap
+from spine.atlas.texture import TextureFilter, TextureWrap
 from spine.atlas.atlaspage import AtlasPage
 from spine.atlas.atlasreader import AtlasReader
 from spine.atlas.atlasregion import AtlasRegion
+
+
+class AtlasFormat(object):
+
+    Alpha = 0
+    Intensity = 1
+    LuminanceAlpha = 2
+    RGB565 = 3
+    RGBA4444 = 4
+    RGB888 = 5
+    RGBA8888 = 6
+
+    _format_names = {
+        'Alpha': 0,
+        'Intensity': 1,
+        'LuminanceAlpha': 2,
+        'RGB565': 3,
+        'RGBA4444': 4,
+        'RGB888': 5,
+        'RGBA8888': 6
+    }
+
+    @classmethod
+    def get_type(cls, type_name):
+        return cls._format_names[type_name]
 
 
 class Atlas(object):
