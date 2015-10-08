@@ -114,7 +114,7 @@ cdef class MeshAttachment(Attachment):
             world_vertices[i + 1] = vx * m10 + vy * m11 + y
             world_vertices[i + 2] = z
             i += 3
-            j += 1
+            j += 2
 
     cpdef compute_world_vertices_uvs(MeshAttachment self, Slot slot,
                                      list world_vertices):

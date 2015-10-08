@@ -281,7 +281,7 @@ cdef class SkinnedMeshAttachment(Attachment):
             int bones_count = len(bones)
             float wx, wy, weight
 
-        delta = len(world_vertices) - (len(uvs) << 1) * 5
+        delta = len(world_vertices) - (len(uvs) >> 1) * 5
         while delta < 0:
             world_vertices.append(0.0)
             delta += 1
