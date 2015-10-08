@@ -33,9 +33,14 @@ cdef class SkinnedMeshAttachment(Attachment):
     cdef public float width
     cdef public float height
 
-    cpdef compute_world_vertices(SkinnedMeshAttachment self, float x, float y,
-                                 Slot slot, list world_vertices)
+    cpdef compute_world_vertices(SkinnedMeshAttachment self, Slot slot,
+                                 list world_vertices)
 
-    cpdef compute_world_vertices_with_uvs(SkinnedMeshAttachment self,
-                                          float x, float y, Slot slot,
-                                          list world_vertices)
+    cpdef compute_world_vertices_z(SkinnedMeshAttachment self, Slot slot,
+                                   list world_vertices)
+
+    cpdef compute_world_vertices_uvs(SkinnedMeshAttachment self, Slot slot,
+                                     list world_vertices)
+
+    cpdef compute_world_vertices_z_uvs(SkinnedMeshAttachment self, Slot slot,
+                                       list world_vertices)

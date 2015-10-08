@@ -1,5 +1,5 @@
 from spine.attachment.attachment cimport Attachment
-from spine.bone cimport Bone
+from spine.slot cimport Slot
 
 
 cdef class RegionAttachment(Attachment):
@@ -26,10 +26,14 @@ cdef class RegionAttachment(Attachment):
     cdef public float region_original_width
     cdef public float region_original_height
 
-    cpdef compute_vertices(RegionAttachment self,
-                           float x, float y,
-                           Bone bone, list vertices)
+    cpdef compute_world_vertices(RegionAttachment self, Slot slot,
+                                 list world_vertices)
 
-    cpdef compute_vertices_with_uvs(RegionAttachment self,
-                                    float x, float y,
-                                    Bone bone, list vertices)
+    cpdef compute_world_vertices_z(RegionAttachment self, Slot slot,
+                                   list world_vertices)
+
+    cpdef compute_world_vertices_uvs(RegionAttachment self, Slot slot,
+                                     list world_vertices)
+
+    cpdef compute_world_vertices_z_uvs(RegionAttachment self, Slot slot,
+                                       list world_vertices)

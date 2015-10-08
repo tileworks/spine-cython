@@ -60,7 +60,7 @@ cdef class SkeletonBounds(object):
                 polygon.extend([0.0] * delta)
             elif delta < 0:
                 polygon[:] = polygon[0:polygon_vertex_count + delta]
-            bounding_box.compute_world_vertices(x, y, slot.bone, polygon)
+            bounding_box.compute_world_vertices(slot, polygon)
 
         if update_aabb is True:
             self.aabb_compute()

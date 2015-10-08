@@ -155,6 +155,7 @@ setup(
     author='Tileworks Games',
     author_email='tileworksgames@gmail.com',
     description='Spine runtimes for python',
+    long_description=spine.__doc__,
     license='MIT',
     ext_modules=core_extensions,
     cmdclass=cmdclass,
