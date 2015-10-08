@@ -14,6 +14,7 @@ cdef class Skeleton(object):
     cdef public object skin
     cdef public float x
     cdef public float y
+    cdef public float z
     cdef public float r
     cdef public float g
     cdef public float b

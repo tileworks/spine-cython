@@ -17,6 +17,7 @@ cdef class Skeleton(object):
         self.skin = None
         self.x = 0.0
         self.y = 0.0
+        self.z = 0.0
         self.r = 1.0
         self.g = 1.0
         self.b = 1.0
