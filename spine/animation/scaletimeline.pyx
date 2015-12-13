@@ -1,6 +1,5 @@
 from spine.animation.animation cimport binary_search
 from spine.animation.translatetimeline cimport TranslateTimeline
-from spine.animation.timeline cimport Timeline
 from spine.skeleton.skeleton cimport Skeleton
 from spine.bone cimport Bone
 

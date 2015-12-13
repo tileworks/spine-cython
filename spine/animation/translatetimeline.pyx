@@ -1,4 +1,3 @@
-from spine.animation.timeline cimport Timeline
 from spine.animation.curvetimeline cimport CurveTimeline
 from spine.animation.animation cimport binary_search
 from spine.skeleton.skeleton cimport Skeleton

@@ -1,6 +1,5 @@
 from cpython cimport bool
 
-from spine.animation.timeline cimport Timeline
 from spine.skeleton.skeleton cimport Skeleton
 
 
