@@ -1,5 +1,3 @@
-from cpython cimport bool
-
 from spine.attachment.attachment cimport Attachment
 from spine.attachment.attachment import AttachmentType
 from spine.skeleton.skeleton cimport Skeleton

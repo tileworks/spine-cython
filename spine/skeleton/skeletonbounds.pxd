@@ -2,7 +2,6 @@ from cpython cimport bool
 
 from spine.attachment.boundingboxattachment cimport BoundingBoxAttachment
 from spine.skeleton.skeleton cimport Skeleton
-from spine.slot cimport Slot
 
 
 cdef class SkeletonBounds(object):

@@ -1,5 +1,3 @@
-from cpython cimport bool
-
 from spine.bone cimport Bone
 from spine.ikconstraint cimport IkConstraint
 from spine.slot cimport Slot
