@@ -30,8 +30,8 @@ cdef class Bone(object):
     cdef public float y
     cdef public float rotation
     cdef public float rotation_ik
-    cdef public scale_x
-    cdef public scale_y
+    cdef public float scale_x
+    cdef public float scale_y
     cdef public bool flip_x
     cdef public bool flip_y
     cdef public float m00
@@ -43,8 +43,8 @@ cdef class Bone(object):
     cdef public float world_rotation
     cdef public float world_scale_x
     cdef public float world_scale_y
-    cdef public float world_flip_x
-    cdef public float world_flip_y
+    cdef public bool world_flip_x
+    cdef public bool world_flip_y
 
     cpdef world_to_local(Bone self, list world)
     cpdef local_to_world(Bone self, list local)
