@@ -14,3 +14,5 @@ cdef class AnimationState(object):
 
     cpdef update(AnimationState self, float dt)
     cpdef apply(AnimationState self, Skeleton skeleton)
+    cpdef clear_tracks(AnimationState self)
+    cpdef clear_track(AnimationState self, int track_index)

@@ -19,13 +19,14 @@ cdef class AnimationState(object):
         
     cpdef update(AnimationState self, float dt):
         cdef:
-            int i
             TrackEntry current, current_next
             float previous_dt
+            int i = 0
 
         dt *= self.time_scale
-        for i, current in enumerate(self.tracks):
+        for current in self.tracks:
             if current is None:
+                i += 1
                 continue
 
             current.time += dt * current.time_scale
@@ -43,18 +44,20 @@ cdef class AnimationState(object):
                     if current.loop is False and \
                             (current.last_time >= current.end_time):
                         self.clear_track(i)
+            i += 1
 
     cpdef apply(AnimationState self, Skeleton skeleton):
         cdef:
-            int i, j, count
             list events = self.events
             float time, last_time, end_time, previous_time, alpha
             bool loop, condition
             TrackEntry current, previous
             Event event
-        
-        for i, current in enumerate(self.tracks):
+            int i, j, count = 0
+
+        for current in self.tracks:
             if current is None:
+                i += 1
                 continue
             del events[:]
             time = current.time
@@ -88,11 +91,13 @@ cdef class AnimationState(object):
                 current.animation.mix(skeleton, last_time,
                                       time, loop, events, alpha)
 
-            for j, event in enumerate(events):
+            j = 0
+            for event in events:
                 if current.on_event is not None:
                     current.on_event(j, event)
                 if self.on_event is not None:
                     self.on_event(j, event)
+                j += 1
 
             # Check if completed the animation or a loop iteration.
             if loop is True:
@@ -107,17 +112,22 @@ cdef class AnimationState(object):
                     self.on_complete(i, count)
 
             current.last_time = current.time
+            i += 1
 
-    def clear_tracks(self):
-        for index, track in enumerate(self.tracks):
+    cpdef clear_tracks(AnimationState self):
+        cdef:
+            int index = 0
+            TrackEntry track
+        for track in self.tracks:
             self.clear_track(index)
+            index += 1
         del self.tracks[:]
 
-    def clear_track(self, track_index):
-        tracks = self.tracks
+    cpdef clear_track(AnimationState self, int track_index):
+        cdef list tracks = self.tracks
         if track_index >= len(tracks):
             return
-        current = tracks[track_index]
+        cdef TrackEntry current = tracks[track_index]
         if current is None:
             return
         if current.on_end is not None:
