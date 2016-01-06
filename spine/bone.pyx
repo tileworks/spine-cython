@@ -1,9 +1,7 @@
-from libc.math cimport sin, cos
 from cpython cimport bool
+from libc.math cimport sin, cos
 
 from spine.utils cimport radians
-
-cpdef bool BONE_Y_DOWN = False
 
 
 cdef class BoneData(object):
@@ -24,6 +22,8 @@ cdef class BoneData(object):
 
 
 cdef class Bone(object):
+
+    y_down = False
 
     def __init__(self, bone_data, skeleton, parent):
         self.data = bone_data
@@ -63,11 +63,12 @@ cdef class Bone(object):
 
     cpdef world_to_local(Bone self, list world):
         cdef:
+            bool y_down = Bone.y_down
             float dx = world[0] - self.world_x
             float dy = world[1] - self.world_y
             float m00, m01, m10, m11, inverse_det
         m00, m01, m10, m11 = self.m00, self.m01, self.m10, self.m11
-        if self.world_flip_x != (self.world_flip_y != BONE_Y_DOWN):
+        if self.world_flip_x != (self.world_flip_y != y_down):
             m00 = -m00
             m11 = -m11
         inverse_det = 1 / (m00 * m11 - m01 * m10)
@@ -82,7 +83,10 @@ cdef class Bone(object):
         local[1] = local_x * self.m10 + local_y * self.m11 + self.world_y
 
     cpdef update_world_transform(Bone self):
-        cdef Bone parent = self.parent
+        cdef:
+            bool skeleton_flip_x, skeleton_flip_y
+            Bone parent = self.parent
+            bool y_down = Bone.y_down
         if parent is not None:
             self.world_x = (self.x * parent.m00 +
                             self.y * parent.m01 + parent.world_x)
@@ -107,7 +111,7 @@ cdef class Bone(object):
                 self.world_x = -self.x
             else:
                 self.world_x = self.x
-            if skeleton_flip_y != BONE_Y_DOWN:
+            if skeleton_flip_y != y_down:
                 self.world_y = -self.y
             else:
                 self.world_y = self.y
@@ -129,7 +133,7 @@ cdef class Bone(object):
         else:
             self.m00 = cos_value * world_scale_x
             self.m01 = -sin_value * world_scale_y
-        if self.world_flip_y != BONE_Y_DOWN:
+        if self.world_flip_y != y_down:
             self.m10 = -sin_value * world_scale_x
             self.m11 = -cos_value * world_scale_y
         else:

@@ -1,6 +1,7 @@
+from cpython cimport bool
 from libc.math cimport atan2, sqrt, acos, sin
 
-from spine.bone cimport Bone, BONE_Y_DOWN
+from spine.bone cimport Bone
 from spine.utils cimport degrees
 
 
@@ -42,35 +43,31 @@ cdef class IkConstraint(object):
                    self.bend_direction, self.mix)
 
 
-cdef inline void apply1(Bone bone, float target_x,
-                        float target_y, float alpha):
-    """
-    Adjusts the bone rotation so the tip
-    is as close to the target position as possible.
-    The target is specified in the world coordinate system.
+cdef inline apply1(Bone bone, float target_x, float target_y, float alpha):
+    """Adjusts the bone rotation so the tip is as close to the target position
+    as possible. The target is specified in the world coordinate system.
     """
     cdef:
         float parent_rotation = 0.0
         float rotation, rotation_ik
+        bool y_down = Bone.y_down
 
     if bone.data.inherit_rotation is True and bone.parent is not None:
         parent_rotation = bone.parent.world_rotation
     rotation = bone.rotation
     rotation_ik = degrees(atan2(target_y - bone.world_y,
                                 target_x - bone.world_x))
-    if bone.world_flip_x != (bone.world_flip_y != BONE_Y_DOWN):
+    if bone.world_flip_x != (bone.world_flip_y != y_down):
         rotation_ik = -rotation_ik
     rotation_ik -= parent_rotation
     bone.rotation_ik = rotation + (rotation_ik - rotation) * alpha
 
 
-cdef inline void apply2(Bone parent, Bone child,
-                        float target_x, float target_y,
-                        int bend_direction, float alpha):
-    """
-    Adjusts the parent and child bone rotations
-    so the tip of the child is as close to the target position as possible.
-    The target is specified in the world coordinate system.
+cdef inline apply2(Bone parent, Bone child, float target_x, float target_y,
+                   int bend_direction, float alpha):
+    """Adjusts the parent and child bone rotations so the tip of the child is
+    as close to the target position as possible. The target is specified
+    in the world coordinate system.
     """
     cdef:
         float child_rotation = child.rotation

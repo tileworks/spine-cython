@@ -21,7 +21,6 @@ cdef class IkConstraint(object):
     cpdef apply(IkConstraint self)
 
 
-cdef inline void apply1(Bone bone, float target_x, float target_y, float alpha)
-cdef inline void apply2(Bone parent, Bone child,
-                        float target_x, float target_y,
-                        int bend_direction, float alpha)
+cdef apply1(Bone bone, float target_x, float target_y, float alpha)
+cdef apply2(Bone parent, Bone child, float target_x, float target_y,
+            int bend_direction, float alpha)

@@ -2,8 +2,6 @@ from cpython cimport bool
 
 from spine.skeleton.skeleton cimport Skeleton
 
-cdef bool BONE_Y_DOWN = False
-
 
 cdef class BoneData(object):
 
