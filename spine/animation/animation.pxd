@@ -16,6 +16,6 @@ cdef class Animation(object):
               bool loop, list events, float alpha)
 
 
-cdef inline int binary_search(list values, float target, int step)
-cdef inline int binary_search1(list values, float target)
-cdef inline int linear_search(list values, float target, int step)
+cdef int binary_search(list values, float target, int step)
+cdef int binary_search1(list values, float target)
+cdef int linear_search(list values, float target, int step)

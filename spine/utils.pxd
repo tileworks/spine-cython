@@ -1,2 +1,2 @@
-cdef inline float radians(float degrees)
-cdef inline float degrees(float radians)
+cdef float radians(float degrees)
+cdef float degrees(float radians)
