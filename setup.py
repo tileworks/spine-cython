@@ -115,9 +115,9 @@ for name in modules:
         check_for_removal.append(file_prefix_module_name + '.c')
 
 
-def build_ext(ext_name, files, include_dirs=[]):
+def build_ext(ext_name, files):
     return Extension(
-        ext_name, files, include_dirs,
+        ext_name, files, [],
         extra_compile_args=[cstdarg, '-ffast-math']
     )
 
