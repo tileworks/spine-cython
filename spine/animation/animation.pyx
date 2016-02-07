@@ -38,7 +38,7 @@ cdef class Animation(object):
 cdef inline int binary_search(list values, float target, int step):
     cdef:
         int low = 0
-        int high = int(len(values) / step) - 2
+        int high = len(values) / step - 2
         int current
     if high == 0:
         return step
@@ -60,8 +60,6 @@ cdef inline int binary_search1(list values, float target):
         int current
     if high == 0:
         return 1
-    if high < 0:
-        return 0
     current = high >> 1
     while True:
         if values[current + 1] <= target:

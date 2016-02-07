@@ -45,13 +45,11 @@ cdef class Slot(object):
         self.g = data.g
         self.b = data.b
         self.a = data.a
-        bone_skeleton = self.bone.skeleton
-        for i, slot_data in enumerate(bone_skeleton.data.slots):
-            if slot_data == data:
-                if data.attachment_name is None:
-                    self.set_attachment(None)
-                else:
-                    attachment = bone_skeleton.\
-                        get_attachment_by_slot_index(i, data.attachment_name)
-                    self.set_attachment(attachment)
-                break
+        skeleton = self.bone.skeleton
+        slot_index = skeleton.data.slots.index(data)
+        attachment = None
+        attachment_name = data.attachment_name
+        if attachment_name:
+            attachment = skeleton\
+                .get_attachment_by_slot_index(slot_index, attachment_name)
+        self.set_attachment(attachment)

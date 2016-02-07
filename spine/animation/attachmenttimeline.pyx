@@ -24,34 +24,25 @@ cdef class AttachmentTimeline(Timeline):
 
     cpdef apply(AttachmentTimeline self, Skeleton skeleton,
                 float last_time, float time, list fired_events, float alpha):
-
         cdef list frames = self.frames
-        if time < frames[0] and last_time > time:
-            self.apply(skeleton, last_time, max_integer, None, 0)
+        if time < frames[0]:
+            if last_time > time:
+                self.apply(skeleton, last_time, max_integer, None, 0)
             return
         elif last_time > time:
             last_time = -1
-
         cdef:
             int frames_count = len(frames)
             int frame_index = frames_count - 1
-        if time < frames[frame_index]:
+        if time < frames[frames_count - 1]:
             frame_index = binary_search1(frames, time) - 1
         if frames[frame_index] < last_time:
             return
-
         cdef:
             basestring attachment_name
-            Attachment attachment
-
-        try:
-            attachment_name = self.attachment_names[frame_index]
-        except IndexError:
-            attachment_name = ''
-
-        attachment = None
+            Attachment attachment = None
+        attachment_name = self.attachment_names[frame_index]
         if attachment_name:
             attachment = skeleton\
                 .get_attachment_by_slot_index(self.slot_index, attachment_name)
-
         skeleton.slots[self.slot_index].set_attachment(attachment)

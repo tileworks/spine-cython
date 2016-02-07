@@ -140,9 +140,9 @@ cdef class Skeleton(object):
             ik_constraint.mix = ik_constraint.data.mix
 
     def set_slots_to_setup_pose(self):
-        draw_order = self.draw_order
-        for index, slot in enumerate(self.slots):
-            draw_order[index] = slot
+        slots = self.slots
+        self.draw_order[:] = slots
+        for slot in slots:
             slot.set_to_setup_pose()
 
     def get_root_bone(self):

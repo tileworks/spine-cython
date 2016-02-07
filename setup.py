@@ -1,8 +1,8 @@
 from os import remove
 from os.path import isfile
 from sys import platform
-from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup
+from setuptools.extension import Extension
 
 import spine
 
@@ -152,14 +152,25 @@ else:
 setup(
     name='spine-cython',
     version=spine.__version__,
-    author='Tileworks Games',
+    author='Tileworks Games and other contributors.',
     author_email='tileworksgames@gmail.com',
-    description='Spine runtimes for python',
+    description='Spine runtimes for python.',
     long_description=spine.__doc__,
-    license='MIT',
+    license='Spine Runtimes Software License',
     ext_modules=core_extensions,
     cmdclass=cmdclass,
     packages=packages,
     package_dir=package_dir,
-    package_data=package_data
+    package_data=package_data,
+    keywords='spine',
+    classifiers=[
+        'Intended Audience :: Developers',
+        'Intended Audience :: End Users/Desktop',
+        'Intended Audience :: Information Technology',
+        'Programming Language :: Python :: 2.7',
+        'Operating System :: Microsoft :: Windows',
+        'Topic :: Games/Entertainment',
+        'Topic :: Multimedia :: Graphics',
+    ],
+    setup_requries=['cython>=0.20']
 )

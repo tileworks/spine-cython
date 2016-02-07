@@ -11,9 +11,10 @@ class Skin(object):
         return self.attachments.get((slot_index, name), None)
 
     def attach_all(self, skeleton, old_skin):
-        for slot_index, name in old_skin.attachments:
+        for entry, attachment in old_skin.attachments.iteritems():
+            slot_index, name = entry
             slot = skeleton.slots[slot_index]
-            if slot.attachment is not None and slot.attachment.name == name:
-                attachment = self.get_attachment(slot_index, name)
-                if attachment is not None:
-                    slot.set_attachment(attachment)
+            if slot.attachment == attachment:
+                new_attachment = self.get_attachment(slot_index, name)
+                if new_attachment is not None:
+                    slot.attachment = attachment
