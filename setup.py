@@ -29,7 +29,6 @@ setup(
         'Intended Audience :: End Users/Desktop',
         'Intended Audience :: Information Technology',
         'Programming Language :: Python :: 2.7',
-        'Operating System :: Microsoft :: Windows',
         'Topic :: Games/Entertainment',
         'Topic :: Multimedia :: Graphics'
     ]
