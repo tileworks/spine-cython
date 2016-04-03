@@ -33,3 +33,9 @@ Roadmap
 - Support Spine v3
 - Documentation (after Spine v3)
 - Support Python3
+
+License
+=======
+
+Spine-cython is released under the terms of the Spine Runtimes Software 
+License. Please refer to the LICENSE file.
