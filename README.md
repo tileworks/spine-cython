@@ -7,7 +7,9 @@ Implementation of the [Esoteric Software Spine](http://esotericsoftware.com/)
 
 Library is working on Python2.7, but it isn't tested yet with Python3. 
 For examples and how to create renderer check 
-[spinekivy](https://github.com/tileworks/spinekivy) project. 
+[spinekivy](https://github.com/tileworks/spinekivy) project. For basic 
+understanding of runtime check official Spine 
+[documentation](http://esotericsoftware.com/spine-using-runtimes).
 
 
 Installation
