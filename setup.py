@@ -1,8 +1,7 @@
 from os import remove
 from os.path import isfile
 from sys import platform
-from setuptools import setup
-from setuptools.extension import Extension
+from setuptools import Extension, setup
 
 import spine
 
