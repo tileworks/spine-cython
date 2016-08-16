@@ -48,7 +48,7 @@ cdef class SkinnedMeshAttachment(Attachment):
         if not uvs or len(uvs) != region_uvs_count:
             uvs[:] = [0.0] * region_uvs_count
         i = 0
-        if self.region_rotate is True:
+        if self.region_rotate:
             while i < region_uvs_count:
                 uvs[i] = region_u + region_uvs[i + 1] * width
                 uvs[i + 1] = region_v + height - region_uvs[i] * height
@@ -74,12 +74,13 @@ cdef class SkinnedMeshAttachment(Attachment):
             int w, v, b, f, nn, delta
             int bones_count = len(bones)
             float wx, wy, weight
-
-        delta = len(world_vertices) - len(uvs)
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
-
+            int vertices_count = len(uvs)
+        delta = len(world_vertices) - vertices_count
+        if delta < 0:
+            for i in range(-delta):
+                world_vertices.append(0.0)
+        elif delta > 0:
+            del world_vertices[vertices_count:]
         w = v = b = f = 0
         if not slot.attachment_vertices:
             while v < bones_count:
@@ -123,74 +124,6 @@ cdef class SkinnedMeshAttachment(Attachment):
                 world_vertices[w] = wx + x
                 world_vertices[w + 1] = wy + y
                 w += 2
-
-    cpdef compute_world_vertices_z(SkinnedMeshAttachment self, Slot slot,
-                                   list world_vertices):
-        cdef:
-            Bone bone
-            Skeleton skeleton = slot.bone.skeleton
-            list skeleton_bones = skeleton.bones
-            float x = skeleton.x
-            float y = skeleton.y
-            float z = skeleton.z
-            list uvs = self.uvs
-            list weights = self.weights
-            list bones = self.bones
-            list ffd = slot.attachment_vertices
-            int w, v, b, f, j, nn, delta
-            int bones_count = len(bones)
-            float wx, wy, weight
-
-        delta = len(world_vertices) - (len(uvs) >> 1) * 3
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
-
-        w = v = b = f = 0
-        if not slot.attachment_vertices:
-            while v < bones_count:
-                wx = 0.0
-                wy = 0.0
-                nn = bones[v] + v + 1
-                v += 1
-                while v < nn:
-                    bone = skeleton_bones[bones[v]]
-                    vx = weights[b]
-                    vy = weights[b + 1]
-                    weight = weights[b + 2]
-                    wx += ((vx * bone.m00 + vy * bone.m01 + bone.world_x) *
-                           weight)
-                    wy += ((vx * bone.m10 + vy * bone.m11 + bone.world_y) *
-                           weight)
-                    b += 3
-                    v += 1
-                world_vertices[w] = wx + x
-                world_vertices[w + 1] = wy + y
-                world_vertices[w + 2] = z
-                w += 3
-        else:
-            ffd = slot.attachment_vertices
-            while v < bones_count:
-                wx = 0
-                wy = 0
-                nn = bones[v] + v + 1
-                v += 1
-                while v < nn:
-                    bone = skeleton_bones[bones[v]]
-                    vx = weights[b] + ffd[f]
-                    vy = weights[b + 1] + ffd[f + 1]
-                    weight = weights[b + 2]
-                    wx += ((vx * bone.m00 + vy * bone.m01 + bone.world_x) *
-                           weight)
-                    wy += ((vx * bone.m10 + vy * bone.m11 + bone.world_y) *
-                           weight)
-                    f += 2
-                    b += 3
-                    v += 1
-                world_vertices[w] = wx + x
-                world_vertices[w + 1] = wy + y
-                world_vertices[w + 2] = z
-                w += 3
 
     cpdef compute_world_vertices_uvs(SkinnedMeshAttachment self, Slot slot,
                                      list world_vertices):
@@ -207,12 +140,13 @@ cdef class SkinnedMeshAttachment(Attachment):
             int w, v, b, f, j, nn, delta
             int bones_count = len(bones)
             float wx, wy, weight
-
-        delta = len(world_vertices) - (len(uvs) << 1)
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
-
+            int vertices_count = len(uvs) << 1
+        delta = len(world_vertices) - vertices_count
+        if delta < 0:
+            for i in range(-delta):
+                world_vertices.append(0.0)
+        elif delta > 0:
+            del world_vertices[vertices_count:]
         w = v = b = f = j = 0
         if not ffd:
             while v < bones_count:
@@ -260,77 +194,4 @@ cdef class SkinnedMeshAttachment(Attachment):
                 world_vertices[w + 2] = uvs[j]
                 world_vertices[w + 3] = uvs[j + 1]
                 w += 4
-                j += 2
-
-    cpdef compute_world_vertices_z_uvs(SkinnedMeshAttachment self, Slot slot,
-                                       list world_vertices):
-        cdef:
-            Bone bone
-            Skeleton skeleton = slot.bone.skeleton
-            list skeleton_bones = skeleton.bones
-            float x = skeleton.x
-            float y = skeleton.y
-            float z = skeleton.z
-            list uvs = self.uvs
-            list weights = self.weights
-            list bones = self.bones
-            list ffd = slot.attachment_vertices
-            int w, v, b, f, j, nn, delta
-            int bones_count = len(bones)
-            float wx, wy, weight
-
-        delta = len(world_vertices) - (len(uvs) >> 1) * 5
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
-
-        w = v = b = f = j = 0
-        if not ffd:
-            while v < bones_count:
-                wx = 0.0
-                wy = 0.0
-                nn = bones[v] + v + 1
-                v += 1
-                while v < nn:
-                    bone = skeleton_bones[bones[v]]
-                    vx = weights[b]
-                    vy = weights[b + 1]
-                    weight = weights[b + 2]
-                    wx += ((vx * bone.m00 + vy * bone.m01 + bone.world_x) *
-                           weight)
-                    wy += ((vx * bone.m10 + vy * bone.m11 + bone.world_y) *
-                           weight)
-                    b += 3
-                    v += 1
-                world_vertices[w] = wx + x
-                world_vertices[w + 1] = wy + y
-                world_vertices[w + 2] = z
-                world_vertices[w + 3] = uvs[j]
-                world_vertices[w + 4] = uvs[j + 1]
-                w += 5
-                j += 2
-        else:
-            while v < bones_count:
-                wx = 0
-                wy = 0
-                nn = bones[v] + v + 1
-                v += 1
-                while v < nn:
-                    bone = skeleton_bones[bones[v]]
-                    vx = weights[b] + ffd[f]
-                    vy = weights[b + 1] + ffd[f + 1]
-                    weight = weights[b + 2]
-                    wx += ((vx * bone.m00 + vy * bone.m01 + bone.world_x) *
-                           weight)
-                    wy += ((vx * bone.m10 + vy * bone.m11 + bone.world_y) *
-                           weight)
-                    f += 2
-                    b += 3
-                    v += 1
-                world_vertices[w] = wx + x
-                world_vertices[w + 1] = wy + y
-                world_vertices[w + 2] = z
-                world_vertices[w + 3] = uvs[j]
-                world_vertices[w + 4] = uvs[j + 1]
-                w += 5
                 j += 2
