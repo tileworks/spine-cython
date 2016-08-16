@@ -35,11 +35,5 @@ cdef class MeshAttachment(Attachment):
     cpdef compute_world_vertices(MeshAttachment self, Slot slot,
                                  list world_vertices)
 
-    cpdef compute_world_vertices_z(MeshAttachment self, Slot slot,
-                                   list world_vertices)
-
     cpdef compute_world_vertices_uvs(MeshAttachment self, Slot slot,
                                      list world_vertices)
-
-    cpdef compute_world_vertices_z_uvs(MeshAttachment self, Slot slot,
-                                       list world_vertices)

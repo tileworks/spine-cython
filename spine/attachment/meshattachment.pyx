@@ -47,7 +47,7 @@ cdef class MeshAttachment(Attachment):
         if not uvs or len(uvs) != uvs_count:
             uvs[:] = [0.0] * uvs_count
         i = 0
-        if self.region_rotate is True:
+        if self.region_rotate:
             while i < uvs_count:
                 uvs[i] = region_u + region_uvs[i + 1] * width
                 uvs[i + 1] = region_v + height - region_uvs[i] * height
@@ -70,51 +70,20 @@ cdef class MeshAttachment(Attachment):
             int vertices_count = len(vertices)
             int i, delta
         m00, m01, m10, m11 = bone.m00, bone.m01, bone.m10, bone.m11
-
         if len(slot.attachment_vertices) == vertices_count:
             vertices = slot.attachment_vertices
         delta = len(world_vertices) - vertices_count
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
+        if delta < 0:
+            for i in range(-delta):
+                world_vertices.append(0.0)
+        elif delta > 0:
+            del world_vertices[vertices_count:]
         i = 0
         while i < vertices_count:
             vx = vertices[i]
             vy = vertices[i + 1]
             world_vertices[i] = vx * m00 + vy * m01 + x
             world_vertices[i + 1] = vx * m10 + vy * m11 + y
-            i += 2
-
-    cpdef compute_world_vertices_z(MeshAttachment self, Slot slot,
-                                   list world_vertices):
-        cdef:
-            float m00, m01, m10, m11, vx, vy
-            Bone bone = slot.bone
-            Skeleton skeleton = bone.skeleton
-            float x = skeleton.x + bone.world_x
-            float y = skeleton.y + bone.world_y
-            float z = skeleton.z
-            list vertices = self.vertices
-            int vertices_count = len(vertices)
-            int i, j, delta
-        m00, m01, m10, m11 = bone.m00, bone.m01, bone.m10, bone.m11
-
-        if len(slot.attachment_vertices) == vertices_count:
-            vertices = slot.attachment_vertices
-        vertices_count = (vertices_count >> 1) * 3
-        delta = len(world_vertices) - vertices_count
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
-        i = j = 0
-        while i < vertices_count:
-            vx = vertices[j]
-            vy = vertices[j + 1]
-            world_vertices[i] = vx * m00 + vy * m01 + x
-            world_vertices[i + 1] = vx * m10 + vy * m11 + y
-            world_vertices[i + 2] = z
-            i += 3
-            j += 2
 
     cpdef compute_world_vertices_uvs(MeshAttachment self, Slot slot,
                                      list world_vertices):
@@ -129,14 +98,15 @@ cdef class MeshAttachment(Attachment):
             int vertices_count = len(vertices)
             int i, j, delta
         m00, m01, m10, m11 = bone.m00, bone.m01, bone.m10, bone.m11
-
         if len(slot.attachment_vertices) == vertices_count:
             vertices = slot.attachment_vertices
         vertices_count <<= 1
         delta = len(world_vertices) - vertices_count
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
+        if delta < 0:
+            for i in range(-delta):
+                world_vertices.append(0.0)
+        elif delta > 0:
+            del world_vertices[vertices_count:]
         i = j = 0
         while i < vertices_count:
             vx = vertices[j]
@@ -146,38 +116,4 @@ cdef class MeshAttachment(Attachment):
             world_vertices[i + 2] = uvs[j]
             world_vertices[i + 3] = uvs[j + 1]
             i += 4
-            j += 2
-
-    cpdef compute_world_vertices_z_uvs(MeshAttachment self, Slot slot,
-                                       list world_vertices):
-        cdef:
-            float m00, m01, m10, m11, vx, vy
-            Bone bone = slot.bone
-            Skeleton skeleton = bone.skeleton
-            float x = skeleton.x + bone.world_x
-            float y = skeleton.y + bone.world_y
-            float z = skeleton.z
-            list uvs = self.uvs
-            list vertices = self.vertices
-            int vertices_count = len(vertices)
-            int i, j, delta
-        m00, m01, m10, m11 = bone.m00, bone.m01, bone.m10, bone.m11
-
-        if len(slot.attachment_vertices) == vertices_count:
-            vertices = slot.attachment_vertices
-        vertices_count = (vertices_count >> 1) * 5
-        delta = len(world_vertices) - vertices_count
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
-        i = j = 0
-        while i < vertices_count:
-            vx = vertices[j]
-            vy = vertices[j + 1]
-            world_vertices[i] = vx * m00 + vy * m01 + x
-            world_vertices[i + 1] = vx * m10 + vy * m11 + y
-            world_vertices[i + 2] = z
-            world_vertices[i + 3] = uvs[j]
-            world_vertices[i + 4] = uvs[j + 1]
-            i += 5
             j += 2
