@@ -29,11 +29,5 @@ cdef class RegionAttachment(Attachment):
     cpdef compute_world_vertices(RegionAttachment self, Slot slot,
                                  list world_vertices)
 
-    cpdef compute_world_vertices_z(RegionAttachment self, Slot slot,
-                                   list world_vertices)
-
     cpdef compute_world_vertices_uvs(RegionAttachment self, Slot slot,
                                      list world_vertices)
-
-    cpdef compute_world_vertices_z_uvs(RegionAttachment self, Slot slot,
-                                       list world_vertices)

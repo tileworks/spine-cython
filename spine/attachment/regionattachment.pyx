@@ -47,7 +47,7 @@ cdef class RegionAttachment(Attachment):
 
     def set_uvs(self, u, v, u2, v2, rotate):
         uvs = self.uvs
-        if rotate is True:
+        if rotate:
             uvs[X2] = u
             uvs[Y2] = v2
             uvs[X3] = u
@@ -71,19 +71,15 @@ cdef class RegionAttachment(Attachment):
                           self.scale_x)
         region_scale_y = (self.height / self.region_original_height *
                           self.scale_y)
-
         local_x = (-self.width / 2 * self.scale_x +
                    self.region_offset_x * region_scale_x)
         local_y = (-self.height / 2 * self.scale_y +
                    self.region_offset_y * region_scale_y)
-
         local_x2 = local_x + self.region_width * region_scale_x
         local_y2 = local_y + self.region_height * region_scale_y
-
         radians_value = radians(self.rotation)
         cos_value = cos(radians_value)
         sin_value = sin(radians_value)
-
         local_x_cos_value = local_x * cos_value + self.x
         local_x_sin_value = local_x * sin_value
         local_y_cos_value = local_y * cos_value + self.y
@@ -92,7 +88,6 @@ cdef class RegionAttachment(Attachment):
         local_x2_sin_value = local_x2 * sin_value
         local_y2_cos_value = local_y2 * cos_value + self.y
         local_y2_sin_value = local_y2 * sin_value
-
         offset = self.offset
         offset[X1] = local_x_cos_value - local_y_sin_value
         offset[Y1] = local_y_cos_value + local_x_sin_value
@@ -113,11 +108,12 @@ cdef class RegionAttachment(Attachment):
             float y = skeleton.y + bone.world_y
             list offset = self.offset
             int delta = len(world_vertices) - 8
+        if delta < 0:
+            for i in range(-delta):
+                world_vertices.append(0.0)
+        elif delta > 0:
+            del world_vertices[8:]
         m00, m01, m10, m11 = bone.m00, bone.m01, bone.m10, bone.m11
-
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
         world_vertices[X1] = offset[X1] * m00 + offset[Y1] * m01 + x
         world_vertices[Y1] = offset[X1] * m10 + offset[Y1] * m11 + y
         world_vertices[X2] = offset[X2] * m00 + offset[Y2] * m01 + x
@@ -126,35 +122,6 @@ cdef class RegionAttachment(Attachment):
         world_vertices[Y3] = offset[X3] * m10 + offset[Y3] * m11 + y
         world_vertices[X4] = offset[X4] * m00 + offset[Y4] * m01 + x
         world_vertices[Y4] = offset[X4] * m10 + offset[Y4] * m11 + y
-
-    cpdef compute_world_vertices_z(RegionAttachment self, Slot slot,
-                                   list world_vertices):
-        cdef:
-            float m00, m01, m10, m11
-            Bone bone = slot.bone
-            Skeleton skeleton = bone.skeleton
-            float x = skeleton.x + bone.world_x
-            float y = skeleton.y + bone.world_y
-            float z = skeleton.z
-            list offset = self.offset
-            int delta = len(world_vertices) - 12
-        m00, m01, m10, m11 = bone.m00, bone.m01, bone.m10, bone.m11
-
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
-        world_vertices[0] = offset[X1] * m00 + offset[Y1] * m01 + x
-        world_vertices[1] = offset[X1] * m10 + offset[Y1] * m11 + y
-        world_vertices[2] = z
-        world_vertices[3] = offset[X2] * m00 + offset[Y2] * m01 + x
-        world_vertices[4] = offset[X2] * m10 + offset[Y2] * m11 + y
-        world_vertices[5] = z
-        world_vertices[6] = offset[X3] * m00 + offset[Y3] * m01 + x
-        world_vertices[7] = offset[X3] * m10 + offset[Y3] * m11 + y
-        world_vertices[8] = z
-        world_vertices[9] = offset[X4] * m00 + offset[Y4] * m01 + x
-        world_vertices[10] = offset[X4] * m10 + offset[Y4] * m11 + y
-        world_vertices[11] = z
 
     cpdef compute_world_vertices_uvs(RegionAttachment self, Slot slot,
                                      list world_vertices):
@@ -168,10 +135,11 @@ cdef class RegionAttachment(Attachment):
             list uvs = self.uvs
             int delta = len(world_vertices) - 16
         m00, m01, m10, m11 = bone.m00, bone.m01, bone.m10, bone.m11
-
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
+        if delta < 0:
+            for i in range(-delta):
+                world_vertices.append(0.0)
+        elif delta > 0:
+            del world_vertices[16:]
         world_vertices[0] = offset[X1] * m00 + offset[Y1] * m01 + x
         world_vertices[1] = offset[X1] * m10 + offset[Y1] * m11 + y
         world_vertices[2] = uvs[0]
@@ -188,41 +156,3 @@ cdef class RegionAttachment(Attachment):
         world_vertices[13] = offset[X4] * m10 + offset[Y4] * m11 + y
         world_vertices[14] = uvs[6]
         world_vertices[15] = uvs[7]
-
-    cpdef compute_world_vertices_z_uvs(RegionAttachment self, Slot slot,
-                                       list world_vertices):
-        cdef:
-            float m00, m01, m10, m11
-            Bone bone = slot.bone
-            Skeleton skeleton = bone.skeleton
-            float x = skeleton.x + bone.world_x
-            float y = skeleton.y + bone.world_y
-            float z = skeleton.z
-            list offset = self.offset
-            list uvs = self.uvs
-            int delta = len(world_vertices) - 20
-        m00, m01, m10, m11 = bone.m00, bone.m01, bone.m10, bone.m11
-
-        while delta < 0:
-            world_vertices.append(0.0)
-            delta += 1
-        world_vertices[0] = offset[X1] * m00 + offset[Y1] * m01 + x
-        world_vertices[1] = offset[X1] * m10 + offset[Y1] * m11 + y
-        world_vertices[2] = z
-        world_vertices[3] = uvs[0]
-        world_vertices[4] = uvs[1]
-        world_vertices[5] = offset[X2] * m00 + offset[Y2] * m01 + x
-        world_vertices[6] = offset[X2] * m10 + offset[Y2] * m11 + y
-        world_vertices[7] = z
-        world_vertices[8] = uvs[2]
-        world_vertices[9] = uvs[3]
-        world_vertices[10] = offset[X3] * m00 + offset[Y3] * m01 + x
-        world_vertices[11] = offset[X3] * m10 + offset[Y3] * m11 + y
-        world_vertices[12] = z
-        world_vertices[13] = uvs[4]
-        world_vertices[14] = uvs[5]
-        world_vertices[15] = offset[X4] * m00 + offset[Y4] * m01 + x
-        world_vertices[16] = offset[X4] * m10 + offset[Y4] * m11 + y
-        world_vertices[17] = z
-        world_vertices[18] = uvs[6]
-        world_vertices[19] = uvs[7]
